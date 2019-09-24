@@ -4,7 +4,7 @@
 import argparse
 import subprocess
 import urllib.request
-import requests
+
 
 class Logger:
 
@@ -46,16 +46,14 @@ def perform_whois(domain):
 
 '''
 Perform Reverse WHOIS lookup against target domain
-curl -v https://viewdns.info/reversewhois/\?q\=nettitude.com --header 'User-agent: Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko'
 '''
 def perform_reverse_whois(domain):
     Logger.info("Reverse WHOIS Domain %s" % domain) # passes value to info method in logger which handles it as message despite being called domain here
-    url = ("https://viewdns.info/reversewhois/?q=%s" % domain)
-    header = {"User-Agent" : "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko"}
-    print(url, header)
-    request = urllib.request.Request(url, headers=header)
-    response = urllib.request.urlopen(request)
-    results = response.read()
+    url = ("https://viewdns.info/reversewhois/?q=%s" % domain) # hardcode the base url for reverse whois and pass the domain as a parameter
+    header = {"User-Agent" : "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko"} # hardcode the user agent header otherwise service does not accept the request
+    request = urllib.request.Request(url, headers=header) # Make/create the request using the previously set url and header parameters
+    response = urllib.request.urlopen(request) # Open the request object and write its contents to the response object
+    results = response.read() # Read the contents of the response and write it to the results parameter
     print(results)
 
 
