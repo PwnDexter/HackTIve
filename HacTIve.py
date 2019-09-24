@@ -3,7 +3,8 @@
 
 import argparse
 import subprocess
-
+import urllib.request
+import requests
 
 class Logger:
 
@@ -44,12 +45,28 @@ def perform_whois(domain):
 
 
 '''
+Perform Reverse WHOIS lookup against target domain
+curl -v https://viewdns.info/reversewhois/\?q\=nettitude.com --header 'User-agent: Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko'
+'''
+def perform_reverse_whois(domain):
+    Logger.info("Reverse WHOIS Domain %s" % domain) # passes value to info method in logger which handles it as message despite being called domain here
+    url = ("https://viewdns.info/reversewhois/?q=%s" % domain)
+    header = {"User-Agent" : "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko"}
+    print(url, header)
+    request = urllib.request.Request(url, headers=header)
+    response = urllib.request.urlopen(request)
+    results = response.read()
+    print(results)
+
+
+'''
 Perform DNS lookup against target domain
 '''
 def perform_dns(domain):
     Logger.info("DNS Info %s" % domain)
     output = get_command_output("dig all %s" % domain)
     print(output)
+
 
 '''
 Create an arg parser for handling the program arguments.
@@ -71,6 +88,7 @@ def main():
         print("Domain is %s" % args.domain)
         perform_whois(args.domain)
         perform_dns(args.domain)
+        perform_reverse_whois(args.domain)
     else:
         Logger.failure("Invalid arguments")
         parser.print_help()
