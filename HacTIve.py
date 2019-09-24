@@ -29,7 +29,7 @@ class Logger:
 Runs a command and returns the output as a string
 '''
 def get_command_output(command):
-    split_command = command.split()
+    split_command = command.split() # check_output needs an array so we split the string
     output = subprocess.check_output(split_command)
     return output.decode('utf-8')
 
@@ -38,7 +38,7 @@ def get_command_output(command):
 Perform WHOIS lookup against target domain
 '''
 def perform_whois(domain):
-    Logger.info("WHOIS Domain %s" % domain)
+    Logger.info("WHOIS Domain %s" % domain) # passes value to info method in logger which handles it as message despite being called domain here
     output = get_command_output("whois %s" % domain)
     print(output)
 
@@ -55,8 +55,8 @@ def perform_dns(domain):
 Create an arg parser for handling the program arguments.
 '''
 def create_arg_parser():
-    parser = argparse.ArgumentParser(description='HackTIve Threat Intelligence Framework')
-    parser.add_argument("-d", "--domain", help="The domain to perform TI against")
+    parser = argparse.ArgumentParser(description='HackTIve Threat Intelligence Framework') # Check argparse docs, sets default value description to custom value and prints
+    parser.add_argument("-d", "--domain", help="The domain to perform TI against") # Sets custom argument settings for the script, if -d isnt passed it prints help
     return parser
 
 
