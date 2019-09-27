@@ -4,6 +4,7 @@ Active Threat Intelligence Framework
 - [x] - Perform WHOIS
     - [ ] - Rewrite in Python3
 - [x] - Perform Reverse WHOIS
+    - [ ] - Strip .com, .co.uk etc off the domain so it just searches the name i.e., nettitude
     - [ ] - Beautify the output
     - [ ] - Write out the domains to a file or array
 - [x] - Perform DNS

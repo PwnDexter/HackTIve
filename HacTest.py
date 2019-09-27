@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 
 
+'''
+THIS IS A TEST SCRIPT
+'''
+
+
 import argparse
 import subprocess
 import urllib.request
+from urllib.parse import urlparse
 
 
 class Logger:
@@ -40,7 +46,6 @@ Perform WHOIS lookup against target domain
 '''
 def perform_whois(domain):
     Logger.info("WHOIS Domain %s" % domain) # passes value to info method in logger which handles it as message despite being called domain here
-    domain = domain.split('.',1)[-1]
     output = get_command_output("whois %s" % domain)
     print(output)
 
@@ -50,12 +55,20 @@ Perform Reverse WHOIS lookup against target domain
 '''
 def perform_reverse_whois(domain):
     Logger.info("Reverse WHOIS Domain %s" % domain) # passes value to info method in logger which handles it as message despite being called domain here
+    domain1 = urlparse(domain)
+    print(domain1.netloc)
+   # domain = domain.split('.',1)[-1] # strips everything before the first .
+   # domain = domain.rsplit('.',1)[0]
+   domain2 = domain1.netloc
+   domain2 = domain2.strip("www.","")
+    print(domain2)
     url = ("https://viewdns.info/reversewhois/?q=%s" % domain) # hardcode the base url for reverse whois and pass the domain as a parameter
-    header = {"User-Agent" : "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko"} # hardcode the user agent header otherwise service does not accept the request
-    request = urllib.request.Request(url, headers=header) # Make/create the request using the previously set url and header parameters
-    response = urllib.request.urlopen(request) # Open the request object and write its contents to the response object
-    results = response.read() # Read the contents of the response and write it to the results parameter
-    print(results)
+    print(url)
+#    header = {"User-Agent" : "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko"} # hardcode the user agent header otherwise service does not accept the request
+#    request = urllib.request.Request(url, headers=header) # Make/create the request using the previously set url and header parameters
+#    response = urllib.request.urlopen(request) # Open the request object and write its contents to the response object
+#    results = response.read() # Read the contents of the response and write it to the results parameter
+#    print(results)
 
 
 '''
@@ -85,8 +98,8 @@ def main():
 
     if args.domain is not None:
         print("Domain is %s" % args.domain)
-        perform_whois(args.domain)
-        perform_dns(args.domain)
+#        perform_whois(args.domain)
+#        perform_dns(args.domain)
         perform_reverse_whois(args.domain)
     else:
         Logger.failure("Invalid arguments")
