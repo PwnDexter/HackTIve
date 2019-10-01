@@ -15,4 +15,5 @@ Active Threat Intelligence Framework
     - [ ] - other tools?
 - [ ] - Write out all domains and sub domains to a file or array and unique them and count them
 - [ ] - Perform domain front checking against all identified domains and sub domains
-- [ ] - Look into third party api calls such as shodan, pastebin, hunter etc. and see if any are of use.
+- [ ] - Look into third party api calls such as shodan, pastebin, hunter, wayback machine/url etc. and see if any are of use.
+- [ ] - Perfrom Cert transparancy query and pull out subdomains i.e., https://crt.sh/?q=%25.nettitude.com
