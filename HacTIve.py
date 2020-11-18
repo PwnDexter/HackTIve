@@ -39,9 +39,9 @@ def get_command_output(command):
 
 def perform_whois(domain):
     Logger.title(f"WHOIS Domain {domain}")  # passes value to info method in logger which handles it as message despite being called domain here
-    domain = domain.split('.', 1)[-1]
-    output = get_command_output("whois %s" % domain)
+    output = get_command_output(f"whois {domain}")
     print(output)
+    Logger.success("WHOIS Checks Complete")
 
 
 def perform_dns(domain):
@@ -51,11 +51,12 @@ def perform_dns(domain):
     Logger.title(f"DNS Mail Records {domain}")
     output = get_command_output(f"dig mx {domain}")
     print(output)
+    Logger.success("DNS Checks Complete")
 
 
 def perform_cert_transparency(domain, subdomain_list):
     Logger.title(f"Certificate Transparency {domain}")
-    output = get_command_output("curl -fsSL https://crt.sh/?CN=%%25.%s" % domain)
+    output = get_command_output(f"curl -fsSL https://crt.sh/?CN=%25.{domain}")
     for line in output.split():
         if domain in line and "TD" in line:
             subdomain = line.replace("<TD>", "").replace("</TD>", "").replace("'", "").strip()
