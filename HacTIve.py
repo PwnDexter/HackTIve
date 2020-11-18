@@ -59,10 +59,11 @@ def perform_cert_transparency(domain, subdomain_list):
     for line in output.split():
         if domain in line and "TD" in line:
             subdomain = line.replace("<TD>", "").replace("</TD>", "").replace("'", "").strip()
-            subdomain_list.add(subdomain)
+            subdomain_list.add(subdomain.lower())
+    Logger.success("Certificate Transparency Checks Complete")
 
 
-def perform_reverse_whois(domain):
+def perform_reverse_whois(domain, subdomain_list):
     company = domain[:domain.index(".")]  # String slicing
     Logger.title(f"Reverse WHOIS on {company}")  # passes value to info method in logger which handles it as message despite being called domain here
     url = (f"https://viewdns.info/reversewhois/?q={company}")  # hardcode the base url for reverse whois and pass the domain as a parameter
@@ -76,13 +77,20 @@ def perform_reverse_whois(domain):
     table.add_column("Registrar")
     for result in results:
         table.add_row(result[0], result[1], result[2])
+        subdomain_list.add(result[0].strip().lower())
     console.print(table)
+    Logger.success("Reverse WHOIS Checks Complete")
 
 
 def create_arg_parser():
     parser = argparse.ArgumentParser(description='HackTIve Threat Intelligence Framework')  # Check argparse docs, sets default value description to custom value and prints
     parser.add_argument("-d", "--domain", help="The domain to perform TI against")  # Sets custom argument settings for the script, if -d is not passed it prints help
     return parser
+
+
+def print_all_subdomains(subdomain_list):
+    Logger.title(f"Curated list of subdomains")
+    print("\n".join(sorted(subdomain_list)))
 
 
 def main():
@@ -93,10 +101,10 @@ def main():
         Logger.info(f"Domain is {args.domain}")
         perform_whois(args.domain)
         perform_dns(args.domain)
-        perform_reverse_whois(args.domain)
         subdomain_list = set()
         perform_cert_transparency(args.domain, subdomain_list)
-        print("\n".join(sorted(subdomain_list)))
+        perform_reverse_whois(args.domain, subdomain_list)
+        print_all_subdomains(subdomain_list)
     else:
         Logger.failure("Invalid arguments")
         parser.print_help()
