@@ -1,5 +1,5 @@
 # HackTIve
-Active Threat Intelligence Framework
+Hacking Active Threat Intelligence Framework (HackTIve)
 
 ## Intro & Setup
 
